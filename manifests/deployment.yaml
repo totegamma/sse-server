@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sse-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: sse-server
+  template:
+    metadata:
+      labels:
+        name: sse-server
+    spec:
+      containers:
+      - name: sse-server
+        image: ghcr.io/totegamma/sse-server:master
+        port: 3000
+        imagePullPolicy: Always
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 3000
+          initialDelaySeconds: 3
+          periodSeconds: 3
