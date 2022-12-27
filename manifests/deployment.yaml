@@ -15,7 +15,8 @@ spec:
       containers:
       - name: sse-server
         image: ghcr.io/totegamma/sse-server:master
-        port: 3000
+        ports:
+          - containerPort: 3000
         imagePullPolicy: Always
         livenessProbe:
           httpGet:
