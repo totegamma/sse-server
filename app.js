@@ -28,12 +28,12 @@ app.get('/connect', serverSentEvents, function (req, res) {
 
     console.log(`client connected! (${clients.length})`);
     clients.push(res);
-    res.sse('{"type": "hello"}' + '\n\n');
+    res.sse('data: {"type": "hello"}' + '\n\n');
 });
 
 app.post('/event', function(req, res) {
     res.setHeader('Content-Type', 'text/plain');
-    clients.forEach(e => e?.sse(JSON.stringify({"type": "event", "body": req.body}) + '\n\n'));
+    clients.forEach(e => e?.sse('data: ' + JSON.stringify({"type": "event", "body": req.body}) + '\n\n'));
     res.send('OK\n\n');
 })
 
