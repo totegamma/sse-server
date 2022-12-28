@@ -17,27 +17,23 @@ var clients = [];
 
 app.get('/connect', serverSentEvents, function (req, res) {
     req.on("close", function() {
-        console.log(clients.length);
         clients = clients.filter(e => e !== res);
-        console.log(clients.length);
         console.log('connection closed!');
     });
 
     req.on("end", function() {
-        console.log(clients.length);
         clients = clients.filter(e => e !== res);
-        console.log(clients.length);
         console.log('connection end!');
     });
 
     console.log(`client connected! (${clients.length})`);
     clients.push(res);
-    res.sse('data: ' + 'hello!' + '\n\n');
+    res.sse('{"type": "hello"}' + '\n\n');
 });
 
 app.post('/event', function(req, res) {
     res.setHeader('Content-Type', 'text/plain');
-    clients.forEach(e => e?.sse('data: ' + JSON.stringify(req.body) + '\n\n'));
+    clients.forEach(e => e?.sse(JSON.stringify({"type": "event", "body": req.body}) + '\n\n'));
     res.send('OK\n\n');
 })
 
